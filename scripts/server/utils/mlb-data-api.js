@@ -1,84 +1,59 @@
 import request from 'request';
 import Player from '../models/Player';
 import PlayerStats from '../models/PlayerStats';
+import fs from 'fs';
+import { Promise } from 'es6-promise';
 
 let _getPlayerData = () => {
 
   let url = process.env.MLB_PLAYER_URL + process.env.MLB_FANTASY_KEY;
 
-  request(url, function (error, response, html) {
-    if (!error && response && response.body) {
-      let data = JSON.parse(response.body);
+  return new Promise((resolve, reject) => {
 
-      data.map((player, i) => {
-        let p = new Player(player);
+    request(url, function (error, response, html) {
+      if (!error && response && response.body) {
+        let data = JSON.parse(response.body);
 
-        p.save(function(err, result) {
-
-          if(err)
-            throw err;
-
-          console.log('added ' + player.FirstName + ' ' + player.LastName + ' to the database.');
-
+        fs.writeFile('mlb-player-data.json', JSON.stringify(data, null, 2), function (err) {
+          if (err) return console.log(err);
+          console.log('MLB Player Data > mlb-player-data.json');
         });
-      });
 
-    }
+        resolve(data);
+
+      }
+    });
+
   });
+
 }
 
-let _getPlayerStats = (year) => {
+let _getPlayerStatsData = (year) => {
 
-  let url = '';
+  let url = process.env.MLB_PLAYER_STATS_2014_URL + process.env.MLB_FANTASY_KEY;
 
-  switch(year) {
+  return new Promise((resolve, reject) => {
 
-    case '2014':
-      url = process.env.MLB_PLAYER_STATS_2014_URL;
-      break;
+    request(url, function (error, response, html) {
+      if (!error && response && response.body) {
 
-    case '2013':
-      url = process.env.MLB_PLAYER_STATS_2013_URL;
-      break;
+        let data = JSON.parse(response.body);
 
-    case '2012':
-      url = process.env.MLB_PLAYER_STATS_2012_URL;
-      break;
-
-    case '2011':
-      url = process.env.MLB_PLAYER_STATS_2011_URL;
-      break;
-
-  }
-
-  url = url + process.env.MLB_FANTASY_KEY;
-
-  request(url, function (error, response, html) {
-    if (!error && response && response.body) {
-
-      let data = JSON.parse(response.body);
-
-      data.map((playerStats, i) => {
-        let ps = new PlayerStats(playerStats);
-
-        // TODO: group stats by year
-
-        ps.save(function(err, result) {
-
-          if(err)
-            throw err;
-
-          console.log('added player stats for ' + playerStats.Name);
-
+        fs.writeFile('mlb-player-'+year+'-stats-data.json', JSON.stringify(data, null, 2), function (err) {
+          if (err) return console.log(err);
+          console.log('MLB Player '+year+' Stats Data > mlb-player-'+year+'-stats-data.json');
         });
-      });
 
-    }
+        resolve(data);
+
+      }
+    });
+
   });
 
 }
 
 export default {
   getPlayerData: _getPlayerData,
-  getPlayerStats: _getPlayerStats
+  getPlayerStatsData: _getPlayerStatsData
 }

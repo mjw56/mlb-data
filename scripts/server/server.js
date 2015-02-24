@@ -1,13 +1,17 @@
 import mongoose from 'mongoose';
 import express from 'express';
 import mlbDataApi from './utils/mlb-data-api';
+import Firebase from 'firebase';
 
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import config from '../../webpack.config';
 
 let serverInit = () => {
-  const api = express();
+  const api = express()
+    .get('/', (req, res) => {
+      res.send(React.renderToString(App));
+    });
 
   const app = express()
     .all('/*', (req, res, next) => {
@@ -20,32 +24,42 @@ let serverInit = () => {
     .listen(3001)
 }
 
-let getData = () => {
-  mlbDataApi.getPlayerData();
-  //mlbDataApi.getPlayerStats('2014');
-  // mlbDataApi.getPlayerStats('2013');
-  // mlbDataApi.getPlayerStats('2012');
-  // mlbDataApi.getPlayerStats('2011');
-}
+let loadPlayerData = () => {
+  mlbDataApi.getPlayerData().then((data) => {
 
-let mongoInit = () => {
+    let ref = new Firebase(process.env.FIREBASE_URL+'/mlb-data-app');
 
-  let uri = process.env.MLB_MONGO_URI;
+    let playersRef = ref.child("players");
 
-  mongoose.connect(uri, function(err, res) {
-
-    if(err) {
-      console.log('error connecting to ' + uri + '. ' + err);
-    } else {
-      console.log('success connecting to ' + uri + '.');
-    }
-
-    getData();
+    playersRef.set(data);
 
   });
 }
 
-mongoInit();
+let loadPlayerStatsData = () => {
+  mlbDataApi.getPlayerStatsData().then((data) => {
+
+    let ref = new Firebase(process.env.FIREBASE_URL+'/mlb-data-app');
+
+    let playersStatsRef = ref.child("players-stats");
+
+    playersStatsRef.set(data);
+
+  });
+}
+
+/**
+* Helper to populate mlb data into
+* a firebase reference
+*/
+let _firebaseInit = () => {
+
+  loadPlayersData();
+  loadPlayerStatsData('2014');
+
+}
+
+//_firebaseInit();
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
