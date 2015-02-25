@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react/addons';
 import Firebase from 'firebase';
 import StatsActions from '../actions/stats-actions';
 import StatsStore from '../stores/stats-store';
@@ -6,9 +6,11 @@ import LeagueStore from '../stores/league-store';
 import Authentication from '../utils/authentication';
 import LeagueComponent from './league-info.react';
 
+let PureRenderMixin = React.addons.PureRenderMixin;
+
 export default React.createClass({
 
-  mixins: [Authentication],
+  mixins: [Authentication, PureRenderMixin],
 
   componentDidMount() {
     StatsStore.addChangeListener(this._onChange);

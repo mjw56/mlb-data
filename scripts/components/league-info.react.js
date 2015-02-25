@@ -1,7 +1,11 @@
-import React from 'react';
+import React from 'react/addons';
 import LeagueStore from '../stores/league-store';
 
+let PureRenderMixin = React.addons.PureRenderMixin;
+
 export default React.createClass({
+
+  mixins: [PureRenderMixin],
 
   getInitialState() {
     return { league: {} };
