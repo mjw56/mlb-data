@@ -3,11 +3,12 @@ import Firebase from 'firebase';
 import StatsActions from '../actions/stats-actions';
 import StatsStore from '../stores/stats-store';
 import LeagueStore from '../stores/league-store';
-
-
-import UserComponent from './user.react';
+import Authentication from '../utils/authentication';
+import LeagueComponent from './league-info.react';
 
 export default React.createClass({
+
+  mixins: [Authentication],
 
   componentDidMount() {
     StatsStore.addChangeListener(this._onChange);
@@ -29,7 +30,7 @@ export default React.createClass({
     return (
       <div>
         <h1>MLB Draft App</h1>
-        <UserComponent />
+        <LeagueComponent />
       </div>
     );
   }

@@ -4,9 +4,7 @@ import Firebase from 'firebase';
 
 class StatsActions {
 
-  constructor() {
-
-  }
+  constructor() {}
 
   getStats() {
 

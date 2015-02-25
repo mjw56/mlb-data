@@ -19,6 +19,10 @@ class UserStore extends Events.EventEmitter {
     this.removeListener(this.CHANGE_EVENT, callback);
   }
 
+  isAuth() {
+    return this._user.loggedIn;
+  }
+
   getUserInfo() {
     return this._user;
   }

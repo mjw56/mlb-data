@@ -1,11 +1,21 @@
 import React from 'react';
+import Router from 'react-router';
 import Firebase from 'firebase';
 import UserActions from '../actions/user-actions';
 import UserStore from '../stores/user-store';
 
 export default React.createClass({
 
+  mixins: [ Router.Navigation ],
+
+  statics: {
+    attemptedTransition: null
+  },
+
   getInitialState() {
+
+    console.log('wtf')
+
     return {
       loggedIn: false,
       user: {}
@@ -30,15 +40,18 @@ export default React.createClass({
   _login() {
     let ref = new Firebase(process.env.FIREBASE_URL);
 
-    ref.authWithOAuthPopup("github", function(error, authData) {
+    ref.authWithOAuthPopup("github", (error, authData) => {
       if (error) {
         console.log("Login Failed!", error);
       } else {
         console.log("Authenticated successfully with payload:", authData);
+
         UserActions.userLogin({
           id: authData.uid,
           name: authData.github.displayName
         });
+
+        this.replaceWith('/dashboard');
       }
     });
   },
@@ -54,15 +67,7 @@ export default React.createClass({
   render() {
     return (
       <div>
-        { this.state.loggedIn ?
-
-            <div>
-              <span>{this.state.user.name}</span>
-              <button onClick={this._logout}>Logout</button>
-            </div>
-          :
-            <button onClick={this._login}>Login</button>
-        }
+        <button onClick={this._login}>Login</button>
       </div>
     );
   }

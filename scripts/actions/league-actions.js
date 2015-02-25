@@ -5,15 +5,13 @@ import firebaseAPI from '../utils/firebase-mlb-api';
 
 class LeagueActions {
 
-  constructor() {
-
-  }
+  constructor() {}
 
   findLeaguesForUser(user) {
     firebaseAPI.findLeaguesForUserID(user.id).then((result) => {
       Dispatcher.handleAction({
         type: Constants.ActionTypes.RECEIVE_USER_LEAGUE_INFO,
-        info: result
+        league: result
       });
     });
   }

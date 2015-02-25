@@ -10,9 +10,7 @@ class LeagueStore extends Events.EventEmitter {
     super();
     Dispatcher.register(this._dispatchToken.bind(this));
     this.CHANGE_EVENT = 'change';
-    this._members = [];
-    this._name = '';
-    this._teams = [];
+    this.league = { inLeague: false };
   }
 
   addChangeListener(callback) {
@@ -23,36 +21,24 @@ class LeagueStore extends Events.EventEmitter {
     this.removeListener(this.CHANGE_EVENT, callback);
   }
 
-  getName() {
-    return this._name;
-  }
-
-  getMembers() {
-    return this._members;
-  }
-
-  getTeams() {
-    return this._teams;
+  getLeague() {
+    return this.league;
   }
 
   _emitChange() {
     this.emit(this.CHANGE_EVENT);
   }
 
-  _createLeague(league) {
-    this.name = league.name;
-  }
-
   _addNewMember(user) {
-    this._members.push(user);
+    this.league.members.push(user);
   }
 
   _fetchLeagueInfo(user) {
     LeagueActions.findLeaguesForUser(user);
   }
 
-  _updateLeagueInfo(info) {
-
+  _updateLeagueInfo(league) {
+    this.league = { inLeague: league.inLeague, info: league.info }
   }
 
   _dispatchToken(action) {
@@ -63,13 +49,13 @@ class LeagueStore extends Events.EventEmitter {
           this._fetchLeagueInfo(action.user);
           break;
 
-      case Constants.RECEIVE_USER_LEAGUE_INFO:
-          this._updateLeagueInfo(action.info);
+      case Constants.ActionTypes.RECEIVE_USER_LEAGUE_INFO:
+          this._updateLeagueInfo(action.league);
           this._emitChange();
           break;
 
       case Constants.ActionTypes.CREATE_LEAGUE:
-          this._createLeague(action.league);
+          this._updateLeagueInfo(action.league);
           this._emitChange();
           break;
 

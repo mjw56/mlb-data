@@ -5,15 +5,15 @@ let _findLeaguesForUserID = (user) => {
 
   let ref = new Firebase(process.env.FIREBASE_URL + "/mlb-data-app/leagues");
 
-  let userInLeagues = false;
+  let userInLeague = false;
 
   return new Promise((resolve, reject) => {
 
     ref.once("value", (snapshot) => {
 
-      userInLeagues = snapshot.val() ? true : false;
+      userInLeague = snapshot.val() ? true : false;
 
-      resolve({ inLeagues: userInLeagues, leagues: snapshot.val() });
+      resolve({ inLeague: userInLeague, info: snapshot.val() });
 
     }, (err) => {
       reject('failed to get firebase data ' + err.code);
