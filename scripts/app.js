@@ -1,15 +1,20 @@
 import React from 'react';
 import Router from 'react-router';
 import Dashboard from './components/dashboard.react';
+import Authentication from './utils/authentication';
 import Login from './components/login.react';
 
-let { DefaultRoute, Route, RouteHandler } = Router;
+let { DefaultRoute, Route, RouteHandler, Link } = Router;
 
 let App = React.createClass({
 
   render() {
     return (
       <div className="container">
+
+        <ul>
+          <li><Link to="dashboard">Dashboard</Link> (authenticated)</li>
+        </ul>
 
         <RouteHandler/>
       </div>
