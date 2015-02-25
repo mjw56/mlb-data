@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'react-router';
-import Home from './components/dashboard.react';
+import Dashboard from './components/dashboard.react';
+import Login from './components/login.react';
 
 let { DefaultRoute, Route, RouteHandler } = Router;
 
@@ -18,7 +19,8 @@ let App = React.createClass({
 });
 
 let routes = <Route handler={App}>
-  <DefaultRoute name="home" handler={Home}/>
+  <Route name="login" handler={Login}/>
+  <Route name="dashboard" handler={Dashboard}/>
 </Route>
 
 Router.run(routes, function(Handler) {
