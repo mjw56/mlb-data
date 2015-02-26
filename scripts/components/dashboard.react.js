@@ -17,17 +17,6 @@ export default React.createClass({
     StatsActions.getStats();
   },
 
-  _getStatsFromStore() {
-
-    let stats = StatsStore.getAllStats();
-
-    this.setState( { stats: stats });
-  },
-
-  _onChange() {
-    this._getStatsFromStore();
-  },
-
   render() {
     return (
       <div>

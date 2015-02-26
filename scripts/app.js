@@ -13,7 +13,7 @@ let App = React.createClass({
       <div className="container">
 
         <ul>
-          <li><Link to="dashboard">Dashboard</Link> (authenticated)</li>
+          <li><Link to="dashboard">Dashboard</Link></li>
         </ul>
 
         <RouteHandler/>

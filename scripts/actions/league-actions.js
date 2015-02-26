@@ -16,6 +16,10 @@ class LeagueActions {
     });
   }
 
+  createLeague(league) {
+    // TODO: call api
+  }
+
 }
 
 let la = new LeagueActions();

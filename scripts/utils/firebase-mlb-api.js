@@ -23,6 +23,15 @@ let _findLeaguesForUserID = (user) => {
 
 }
 
+let _createLeague = (league) => {
+  let ref = new Firebase(process.env.FIREBASE_URL + "/mlb-data-app/leagues");
+
+  ref.set(league);
+
+  return;
+}
+
 export default {
-  findLeaguesForUserID: _findLeaguesForUserID
+  findLeaguesForUserID: _findLeaguesForUserID,
+  createLeague: _createLeague
 }
