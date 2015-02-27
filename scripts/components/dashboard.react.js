@@ -12,11 +12,6 @@ export default React.createClass({
 
   mixins: [Authentication, PureRenderMixin],
 
-  componentDidMount() {
-    StatsStore.addChangeListener(this._onChange);
-    StatsActions.getStats();
-  },
-
   render() {
     return (
       <div>

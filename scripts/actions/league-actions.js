@@ -16,8 +16,13 @@ class LeagueActions {
     });
   }
 
-  createLeague(league) {
-    // TODO: call api
+  createLeague(info) {
+    firebaseAPI.createLeague(info);
+
+    Dispatcher.handleAction({
+      type: Constants.ActionTypes.CREATE_LEAGUE,
+      league: { inLeague: true, info: info }
+    });
   }
 
 }

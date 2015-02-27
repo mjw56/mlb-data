@@ -14,54 +14,24 @@ export default React.createClass({
     attemptedTransition: null
   },
 
-  getInitialState() {
-
-    return {
-      loggedIn: false,
-      user: {}
-    }
-  },
-
   componentDidMount() {
     UserStore.addChangeListener(this._onChange);
   },
 
-  _getUserFromStore() {
-
+  _getStateFromStore() {
     let user = UserStore.getUserInfo();
 
-    this.setState({
-      loggedIn: user.loggedIn,
-      user: user.user
-    });
-
+    if(user.loggedIn) {
+      this.replaceWith('/dashboard');
+    }
   },
 
   _login() {
-    let ref = new Firebase(process.env.FIREBASE_URL);
-
-    ref.authWithOAuthPopup("github", (error, authData) => {
-      if (error) {
-        console.log("Login Failed!", error);
-      } else {
-        console.log("Authenticated successfully with payload:", authData);
-
-        UserActions.userLogin({
-          id: authData.uid,
-          name: authData.github.displayName
-        });
-
-        this.replaceWith('/dashboard');
-      }
-    });
-  },
-
-  _logout() {
-    UserActions.userLogout();
+    UserActions.userLogin();
   },
 
   _onChange() {
-    this._getUserFromStore();
+    this._getStateFromStore();
   },
 
   render() {

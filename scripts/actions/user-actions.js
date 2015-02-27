@@ -1,15 +1,18 @@
 import Dispatcher from '../utils/dispatcher';
 import Constants from '../constants/constants';
 import Firebase from 'firebase';
+import firebaseAPI from '../utils/firebase-mlb-api';
 
 class StatsActions {
 
   constructor() {}
 
   userLogin(user) {
-    Dispatcher.handleAction({
-      type: Constants.ActionTypes.USER_LOGIN,
-      user: user
+    firebaseAPI.authenticateUser().then((user) => {
+      Dispatcher.handleAction({
+        type: Constants.ActionTypes.USER_LOGIN,
+        user: user
+      });
     });
   }
 

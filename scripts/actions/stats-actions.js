@@ -1,24 +1,18 @@
 import Dispatcher from '../utils/dispatcher';
 import Constants from '../constants/constants';
 import Firebase from 'firebase';
+import firebaseAPI from '../utils/firebase-mlb-api';
 
 class StatsActions {
 
   constructor() {}
 
   getStats() {
-
-    let ref = new Firebase(process.env.FIREBASE_URL + "/mlb-data-app/players-stats");
-
-    ref.on("value", (snapshot) => {
-
+    firebaseAPI.getPlayerStats().then((stats) => {
       Dispatcher.handleAction({
         type: Constants.ActionTypes.RECEIVE_PLAYER_STATS,
-        stats: snapshot.val()
+        stats: stats
       });
-
-    }, (err) => {
-      console.log('failed to get firebase data ' + err.code);
     });
   }
 
