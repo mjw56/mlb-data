@@ -1,6 +1,10 @@
 import Firebase from 'firebase';
 import {Promise} from 'es6-promise';
 
+
+// TODO: Use websockets to get real time updates to Action Creators!!
+
+
 let _authenticateUser = () => {
   let ref = new Firebase(process.env.FIREBASE_URL);
 
@@ -18,9 +22,12 @@ let _authenticateUser = () => {
           name: authData.github.displayName
         });
 
-        resolve({
-          id: authData.uid,
-          name: authData.github.displayName
+        _findLeaguesForUserID(authData.uid).then((leagueInfo) => {
+          resolve({
+            id: authData.uid,
+            name: authData.github.displayName,
+            leaguesUserIsIn: leagueInfo
+          });
         });
       }
     });
@@ -50,15 +57,29 @@ let _findLeaguesForUserID = (user) => {
 
 }
 
+let _getAllLeagues = () => {
+  return new Promise((resolve, reject) => {
+    let ref = new Firebase(process.env.FIREBASE_URL);
+
+    ref.child('leagues').once("value", (snapshot) => {
+      resolve(snapshot.val());
+    }, (err) => {
+      console.log('failed to get firebase data ' + err.code);
+      reject(err.code);
+    });
+  });
+}
+
 let _createLeague = (info) => {
 
-  console.log("saving at: " + process.env.FIREBASE_URL + "/mlb-data-app/leagues");
+  console.log("saving at: " + process.env.FIREBASE_URL + "/leagues");
 
   let ref = new Firebase(process.env.FIREBASE_URL);
 
-  ref.child('mlb-data-app').child('leagues').set(info);
-  ref.child('users').child(info.ownerId).update({
-    'leagues': [info.name]
+  ref.child('leagues').child(info.name).set(info);
+  ref.child('drafts').child(info.name).set({ started: false });
+  ref.child('users').child(info.ownerId).child('leagues').push({
+    'name': info.name
   });
 }
 
@@ -67,7 +88,7 @@ let _getPlayerStats = () => {
     let ref = new Firebase(process.env.FIREBASE_URL + "/mlb-data-app/players-stats");
 
     ref.on("value", (snapshot) => {
-      resolve(snapshot);
+      resolve(snapshot.val());
     }, (err) => {
       console.log('failed to get firebase data ' + err.code);
       reject(err.code);
@@ -75,9 +96,34 @@ let _getPlayerStats = () => {
   });
 }
 
+let _getDraftStatusForID = (id) => {
+  return new Promise((resolve, reject) => {
+    let ref = new Firebase(process.env.FIREBASE_URL);
+
+    ref.child('drafts').once("value", (snapshot) => {
+      resolve({ started: (snapshot.val() || {})[id].started });
+    }, (err) => {
+      console.log('failed to get firebase data ' + err.code);
+      reject(err.code);
+    });
+  });
+}
+
+let _updateDraftStatus = (update) => {
+  return new Promise((resolve, reject) => {
+    let ref = new Firebase(process.env.FIREBASE_URL);
+    ref.child('drafts').child(update.id).set({ started: update.started  });
+
+    resolve(update);
+  });
+}
+
 export default {
   authenticateUser: _authenticateUser,
   findLeaguesForUserID: _findLeaguesForUserID,
   createLeague: _createLeague,
-  getPlayerStats: _getPlayerStats
+  getPlayerStats: _getPlayerStats,
+  getAllLeagues: _getAllLeagues,
+  getDraftStatusForID: _getDraftStatusForID,
+  updateDraftStatus: _updateDraftStatus
 }

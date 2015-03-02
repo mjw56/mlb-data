@@ -1,5 +1,5 @@
 import UserStore from '../stores/user-store';
-import Login from '../components/login.react';
+import Login from '../components/login/main.react';
 
 export default {
   statics: {
