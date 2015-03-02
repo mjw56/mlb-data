@@ -1,8 +1,8 @@
 import React from 'react/addons';
 import Router from 'react-router';
 import Firebase from 'firebase';
-import UserActions from '../actions/user-actions';
-import UserStore from '../stores/user-store';
+import UserActions from '../../actions/user-actions';
+import UserStore from '../../stores/user-store';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
 
