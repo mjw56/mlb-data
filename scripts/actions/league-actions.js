@@ -10,7 +10,7 @@ class LeagueActions {
   findLeaguesForUser(user) {
     firebaseAPI.findLeaguesForUserID(user.id).then((result) => {
       Dispatcher.handleAction({
-        type: Constants.ActionTypes.RECEIVE_USER_LEAGUE_INFO,
+        type: Constants.ActionTypes.RECEIVE_LEAGUES_USER_IS_IN,
         league: result
       });
     });
@@ -22,6 +22,15 @@ class LeagueActions {
     Dispatcher.handleAction({
       type: Constants.ActionTypes.CREATE_LEAGUE,
       league: { inLeague: true, info: info }
+    });
+  }
+
+  getAllLeagues() {
+    firebaseAPI.getAllLeagues().then((leagues) => {
+      Dispatcher.handleAction({
+        type: Constants.ActionTypes.RECEIVE_ALL_LEAGUES,
+        leagues: leagues
+      });
     });
   }
 
