@@ -1,6 +1,7 @@
 import Dispatcher from '../utils/dispatcher';
 import Constants from '../constants/constants';
 import Events from 'eventemitter3';
+import sortByAll from 'lodash.sortbyall';
 
 class StatsStore extends Events.EventEmitter {
 
@@ -32,7 +33,7 @@ class StatsStore extends Events.EventEmitter {
   }
 
   _setAllStats(stats) {
-    this._stats = stats;
+    this._stats = sortByAll(stats, ["FantasyPoints"]).reverse();
   }
 
   _dispatchToken(action) {
