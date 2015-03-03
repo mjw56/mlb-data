@@ -31,7 +31,7 @@ export default React.createClass({
   },
 
   _onChange() {
-    this.setState({ list: Object.keys(LeagueStore.getFullLeaguesList()) })
+    this.setState({ list: LeagueStore.getFullLeaguesList() })
   },
 
   _joinLeague(event) {
@@ -44,8 +44,8 @@ export default React.createClass({
 
   render() {
 
-    let leagues = this.state.list.map((league) => {
-      return <h5 onClick={this._joinLeague} key={league}>{league}</h5>;
+    let leagues = Object.keys(this.state.list).map((league) => {
+      return <h5 onClick={this._joinLeague} key={league.name}>name: {league} members: {this.state.list[league].members.length}/12</h5>;
     });
 
     return (
