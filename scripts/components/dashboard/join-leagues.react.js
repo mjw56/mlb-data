@@ -1,4 +1,5 @@
 import React from 'react/addons';
+import Router from 'react-router';
 import LeagueStore from '../../stores/league-store';
 import UserStore from '../../stores/user-store';
 import LeagueActions from '../../actions/league-actions';
@@ -7,7 +8,7 @@ let PureRenderMixin = React.addons.PureRenderMixin;
 
 export default React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [PureRenderMixin, Router.Navigation],
 
   getInitialState() {
     return { showList: false, list: [] };
@@ -36,10 +37,15 @@ export default React.createClass({
     });
   },
 
+  _joinLeague(event) {
+    // TODO: call to firebase to add member to league id
+    this.transitionTo('draft-room', {name: event.currentTarget.innerText});
+  },
+
   render() {
 
     let leagues = this.state.list.map((league) => {
-      return <h5 key={league}>{league}</h5>;
+      return <h5 onClick={this._joinLeague} key={league}>{league}</h5>;
     });
 
     return (
