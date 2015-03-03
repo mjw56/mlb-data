@@ -16,6 +16,7 @@ export default React.createClass({
 
   componentDidMount() {
     LeagueStore.addAllLeaguesChangeListener(this._onChange);
+    LeagueStore.addJoiningLeagueChangeListener(this._joinedLeague);
 
     LeagueActions.getAllLeagues();
   },
@@ -28,18 +29,12 @@ export default React.createClass({
     this.setState({ list: Object.keys(LeagueStore.getFullLeaguesList()) })
   },
 
-  _createLeague(e) {
-    e.preventDefault();
-    LeagueActions.createLeague({
-      ownerId: UserStore.getUserInfo().user.id,
-      name: this.refs.leagueName.getDOMNode().value,
-      members: [UserStore.getUserInfo().user.id]
-    });
+  _joinLeague(event) {
+    LeagueActions.joinLeague(event.currentTarget.innerText, UserStore.getUserInfo().user.id);
   },
 
-  _joinLeague(event) {
-    // TODO: call to firebase to add member to league id
-    this.transitionTo('draft-room', {name: event.currentTarget.innerText});
+  _joinedLeague() {
+    this.transitionTo('draft-room', {name: LeagueStore.getLeagueJoining()});
   },
 
   render() {

@@ -20,6 +20,7 @@ class LeagueStore extends Events.EventEmitter {
     this.NEW_LEAGUE_CHANGE = 'new-league-change';
     this.leaguesUserIsIn = { inLeague: false };
     this.newLeague = {};
+    this.leagueJoining = '';
     this.fullLeagueList = undefined;
   }
 
@@ -47,6 +48,14 @@ class LeagueStore extends Events.EventEmitter {
     this.removeListener(this.NEW_LEAGUE_CHANGE, callback);
   }
 
+  addJoiningLeagueChangeListener(callback) {
+    this.on(this.JOINED_LEAGUE_CHANGE, callback);
+  }
+
+  removeJoiningLeagueListChangeListener(callback) {
+    this.removeListener(this.JOINED_LEAGUE_CHANGE, callback);
+  }
+
   getLeaguesUserIsIn() {
     return this.leaguesUserIsIn;
   }
@@ -63,12 +72,21 @@ class LeagueStore extends Events.EventEmitter {
     return this.newLeague;
   }
 
+  getLeagueJoining() {
+    return this.leagueJoining;
+  }
+
   _emitChange(e) {
     this.emit(e);
   }
 
   _addNewMember(user) {
     // TODO
+  }
+
+  _joinedLeague(info) {
+    this.leagueJoining = info.name;
+    this.fullLeagueList[info.name].members.push(info.userId);
   }
 
   _updateLeaguesUserIsIn(leagues) {
@@ -125,6 +143,11 @@ class LeagueStore extends Events.EventEmitter {
       case Constants.ActionTypes.ADD_NEW_MEMBER:
           this._addNewMember(action.user);
           this._emitChange(this.USER_LIST_CHANGE);
+          break;
+
+      case Constants.ActionTypes.JOINED_LEAGUE:
+          this._joinedLeague(action.info);
+          this._emitChange(this.JOINED_LEAGUE_CHANGE);
           break;
 
         default:

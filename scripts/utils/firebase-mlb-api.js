@@ -118,6 +118,15 @@ let _updateDraftStatus = (update) => {
   });
 }
 
+let _joinLeague = (name, userId) => {
+  return new Promise((resolve, reject) => {
+    let ref = new Firebase(process.env.FIREBASE_URL);
+    ref.child('leagues').child(name).child('members').push(userId);
+
+    resolve(true);
+  });
+}
+
 export default {
   authenticateUser: _authenticateUser,
   findLeaguesForUserID: _findLeaguesForUserID,
@@ -125,5 +134,6 @@ export default {
   getPlayerStats: _getPlayerStats,
   getAllLeagues: _getAllLeagues,
   getDraftStatusForID: _getDraftStatusForID,
-  updateDraftStatus: _updateDraftStatus
+  updateDraftStatus: _updateDraftStatus,
+  joinLeague: _joinLeague
 }

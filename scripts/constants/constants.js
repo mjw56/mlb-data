@@ -25,6 +25,7 @@ class Constants {
       RECEIVE_ALL_LEAGUES: null,
 
       CREATE_LEAGUE: null,
+      JOINED_LEAGUE: null,
       ADD_NEW_MEMBER: null,
       CREATE_TEAM: null,
       ADD_NEW_PLAYER: null

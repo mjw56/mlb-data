@@ -34,6 +34,15 @@ class LeagueActions {
     });
   }
 
+  joinLeague(name, userId) {
+    firebaseAPI.joinLeague(name, userId).then((result) => {
+      Dispatcher.handleAction({
+        type: Constants.ActionTypes.JOINED_LEAGUE,
+        info: { name: name, userId: userId} 
+      });
+    });
+  }
+
 }
 
 let la = new LeagueActions();
