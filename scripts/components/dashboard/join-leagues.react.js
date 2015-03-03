@@ -21,6 +21,11 @@ export default React.createClass({
     LeagueActions.getAllLeagues();
   },
 
+  componentWillUnmount() {
+    LeagueStore.removeAllLeaguesChangeListener(this._onChange);
+    LeagueStore.removeJoiningLeagueChangeListener(this._joinedLeague);
+  },
+
   _toggleList() {
     this.setState({ showList: !this.state.showList });
   },

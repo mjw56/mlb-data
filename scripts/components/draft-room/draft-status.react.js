@@ -18,6 +18,10 @@ export default React.createClass({
     DraftActions.getDraftStatusForID(this.props.id);
   },
 
+  componentWillUnmount() {
+    DraftStore.removeDraftStatusListener(this._updateDraftStatus);
+  },
+
   _startDraft() {
     DraftActions.updateDraftStatus({ id: this.props.id, started: true });
   },

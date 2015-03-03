@@ -23,6 +23,10 @@ export default React.createClass({
     this.setState({league: LeagueStore.getLeaguesUserIsIn() });
   },
 
+  componentWillUnmount() {
+    LeagueStore.removeUserLeaguesChangeListener(this._onChange);
+  },
+
   _getLeagueFromStore() {
     this.setState( { league: LeagueStore.getLeaguesUserIsIn() });
   },

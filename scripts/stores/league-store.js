@@ -36,7 +36,7 @@ class LeagueStore extends Events.EventEmitter {
     this.on(this.FULL_LIST_CHANGE, callback);
   }
 
-  removeAllLeaguesListChangeListener(callback) {
+  removeAllLeaguesChangeListener(callback) {
     this.removeListener(this.FULL_LIST_CHANGE, callback);
   }
 
@@ -44,7 +44,7 @@ class LeagueStore extends Events.EventEmitter {
     this.on(this.NEW_LEAGUE_CHANGE, callback);
   }
 
-  removeNewLeagueListChangeListener(callback) {
+  removeNewLeagueChangeListener(callback) {
     this.removeListener(this.NEW_LEAGUE_CHANGE, callback);
   }
 
@@ -52,7 +52,7 @@ class LeagueStore extends Events.EventEmitter {
     this.on(this.JOINED_LEAGUE_CHANGE, callback);
   }
 
-  removeJoiningLeagueListChangeListener(callback) {
+  removeJoiningLeagueChangeListener(callback) {
     this.removeListener(this.JOINED_LEAGUE_CHANGE, callback);
   }
 

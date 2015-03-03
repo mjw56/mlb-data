@@ -26,6 +26,10 @@ export default React.createClass({
     });
   },
 
+  componentWillUnmount() {
+    StatsStore.removeChangeListener(this._onChange);
+  },
+
   _getStatsFromStore() {
     this.setState({
       stats: StatsStore.getAllStats()
