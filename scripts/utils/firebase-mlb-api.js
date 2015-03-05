@@ -119,12 +119,41 @@ let _updateDraftStatus = (update) => {
 }
 
 let _joinLeague = (name, userId) => {
+
+  // first find all leagues and then filter out
+  // ones member is not a part of
+
   return new Promise((resolve, reject) => {
     let ref = new Firebase(process.env.FIREBASE_URL);
-    ref.child('leagues').child(name).child('members').push(userId);
 
-    resolve(true);
+    ref.child('users').child(userId).child('leagues').once("value", (snapshot) => {
+
+      let userLeagues = snapshot.val();
+
+      let leagues = [];
+
+      for(var key in userLeagues) {
+        if(userLeagues[key].name === name) {
+          resolve(false);
+          return;
+        }
+      }
+
+      ref.child('leagues').child(name).child('members').push(userId);
+
+      resolve(true);
+
+    }, (err) => {
+      reject(err.code);
+    });
   });
+}
+
+let _clearData = (user) => {
+  let ref = new Firebase(process.env.FIREBASE_URL);
+  ref.child('leagues').set({});
+  ref.child('drafts').set({});
+  ref.child('users').child(user).child('leagues').set({});
 }
 
 export default {
@@ -135,5 +164,6 @@ export default {
   getAllLeagues: _getAllLeagues,
   getDraftStatusForID: _getDraftStatusForID,
   updateDraftStatus: _updateDraftStatus,
-  joinLeague: _joinLeague
+  joinLeague: _joinLeague,
+  clearData: _clearData
 }

@@ -87,6 +87,9 @@ class LeagueStore extends Events.EventEmitter {
   _joinedLeague(info) {
     this.leagueJoining = info.name;
     this.fullLeagueList[info.name].members.push(info.userId);
+
+
+    console.log(this.leagueJoining)
   }
 
   _updateLeaguesUserIsIn(leagues) {

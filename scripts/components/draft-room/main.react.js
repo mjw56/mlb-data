@@ -6,6 +6,7 @@ import StatsStore from '../../stores/stats-store';
 import LeagueStore from '../../stores/league-store';
 import DraftStatus from './draft-status.react';
 import DraftBoard from './draft-board.react';
+import Memberboard from './member-board.react';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
 
@@ -47,6 +48,7 @@ export default React.createClass({
       <div>
         <h1>{this.getParams().name} Draft Room</h1>
         <DraftStatus id={this.getParams().name} />
+        <Memberboard id={this.getParams().name} />
         <DraftBoard players={this.state.stats} />
       </div>
     );

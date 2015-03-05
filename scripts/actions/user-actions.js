@@ -9,6 +9,8 @@ class StatsActions {
 
   userLogin(user) {
     firebaseAPI.authenticateUser().then((user) => {
+      //firebaseAPI.clearData(user.id);
+
       Dispatcher.handleAction({
         type: Constants.ActionTypes.USER_LOGIN,
         user: user

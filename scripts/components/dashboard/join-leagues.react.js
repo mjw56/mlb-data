@@ -44,8 +44,8 @@ export default React.createClass({
 
   render() {
 
-    let leagues = Object.keys(this.state.list).map((league) => {
-      return <h5 onClick={this._joinLeague} key={league.name}>name: {league} members: {this.state.list[league].members.length}/12</h5>;
+    let leagues = Object.keys(this.state.list || {} ).map((league) => {
+      return <h5 onClick={this._joinLeague} key={league.name}>{league}</h5>;
     });
 
     return (

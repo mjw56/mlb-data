@@ -10,7 +10,7 @@ export default React.createClass({
 
     return (
       <div>
-        { this.props.league.inLeague ?
+        { !this.props.league.inLeague ?
           <h4>Your Leagues: {leagues}</h4>:
           <h4>You are not currently in any leagues</h4>
         }
