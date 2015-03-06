@@ -26,6 +26,10 @@ export default React.createClass({
     DraftActions.updateDraftStatus({ id: this.props.id, started: true });
   },
 
+  _pauseDraft() {
+    DraftActions.updateDraftStatus({ id: this.props.id, started: false });
+  },
+
   _updateDraftStatus() {
     this.setState({ status: DraftStore.getDraftStatus() });
   },
@@ -37,7 +41,7 @@ export default React.createClass({
 
           <div>
             <h3>The Draft is currently in progress</h3>
-            <button onClick={this.pauseDraft}>Pause Draft</button>
+            <button onClick={this._pauseDraft}>Pause Draft</button>
           </div>
           :
           <div>
