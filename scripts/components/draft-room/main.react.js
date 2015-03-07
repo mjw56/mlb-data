@@ -7,15 +7,24 @@ import LeagueStore from '../../stores/league-store';
 import DraftStatus from './draft-status.react';
 import DraftBoard from './draft-board.react';
 import Memberboard from './member-board.react';
+import Helpers from '../../utils/helpers';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
+
+/**
+ * Drafts are snapshottable
+ *
+ * memberList, draftPosition, playerSelectionBoard,
+ * team selections
+ *
+ */
 
 export default React.createClass({
 
   mixins: [Router.State, PureRenderMixin],
 
   getInitialState() {
-    return { stats: [], league: {} }
+    return { stats: [], members: [], league: {} }
   },
 
   componentDidMount() {
@@ -23,7 +32,8 @@ export default React.createClass({
     StatsActions.getStats();
 
     this.setState({
-      league: LeagueStore.getLeagueForID(this.getParams().name)
+      league: LeagueStore.getLeagueForID(this.getParams().name),
+      members: Helpers.knuthShuffle(LeagueStore.getLeagueForID(this.getParams().name).members)
     });
   },
 
@@ -48,7 +58,7 @@ export default React.createClass({
       <div>
         <h1>{this.getParams().name} Draft Room</h1>
         <DraftStatus id={this.getParams().name} />
-        <Memberboard id={this.getParams().name} />
+        <Memberboard id={this.getParams().name} members={this.state.members} />
         <DraftBoard players={this.state.stats} />
       </div>
     );
