@@ -1,6 +1,7 @@
 import React from 'react/addons';
 import LeagueStore from '../../stores/league-store';
 import DraftClock from './draft-clock.react';
+import DraftStore from '../../stores/draft-store';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
 
@@ -9,7 +10,19 @@ export default React.createClass({
   mixins: [PureRenderMixin],
 
   getInitialState() {
-    return { round: 0, onTheClock: 0 };
+    return { round: 0, onTheClock: 0, started: false };
+  },
+
+  componentDidMount() {
+    DraftStore.addDraftStatusListener(this._updateDraftStatus);
+  },
+
+  componentWillUnmount() {
+    DraftStore.removeDraftStatusListener(this._updateDraftStatus);
+  },
+
+  _updateDraftStatus() {
+    this.setState({ started: DraftStore.getDraftStatus().started });
   },
 
   _nextPick() {
@@ -47,7 +60,7 @@ export default React.createClass({
 
     return (
       <div>
-        <DraftClock nextPick={this._nextPick} pick={this.state.onTheClock}/>
+        <DraftClock nextPick={this._nextPick} pick={this.state.onTheClock} started={this.state.started} />
         <h3>{this.props.id} Member List</h3>
         {members}
       </div>

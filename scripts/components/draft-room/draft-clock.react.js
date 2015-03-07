@@ -10,8 +10,10 @@ export default React.createClass({
     return { time: '' }
   },
 
-  componentWillReceiveProps() {
-    this._startTimer();
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.started) {
+      this._startTimer();
+    }
   },
 
   _startTimer() {
