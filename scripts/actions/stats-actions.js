@@ -1,22 +1,14 @@
-import Dispatcher from '../utils/dispatcher';
-import Constants from '../constants/constants';
-import Firebase from 'firebase';
+import alt from '../alt';
 import firebaseAPI from '../utils/firebase-mlb-api';
 
 class StatsActions {
-
-  constructor() {}
-
+  
   getStats() {
     firebaseAPI.getPlayerStats().then((stats) => {
-      Dispatcher.handleAction({
-        type: Constants.ActionTypes.RECEIVE_PLAYER_STATS,
-        stats: stats
-      });
+      this.dispatch(stats);
     });
   }
 
 }
 
-let sa = new StatsActions();
-export default sa;
+export default alt.createActions(StatsActions);

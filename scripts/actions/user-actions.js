@@ -1,30 +1,19 @@
-import Dispatcher from '../utils/dispatcher';
-import Constants from '../constants/constants';
-import Firebase from 'firebase';
+import alt from '../alt';
 import firebaseAPI from '../utils/firebase-mlb-api';
 
-class StatsActions {
-
-  constructor() {}
+class UserActions {
 
   userLogin(user) {
     firebaseAPI.authenticateUser().then((user) => {
       //firebaseAPI.clearData(user.id);
-
-      Dispatcher.handleAction({
-        type: Constants.ActionTypes.USER_LOGIN,
-        user: user
-      });
+      this.dispatch(user);
     });
   }
 
   userLogout() {
-    Dispatcher.handleAction({
-      type: Constants.ActionTypes.USER_LOGOUT
-    });
+    this.dispatch();
   }
 
 }
 
-let sa = new StatsActions();
-export default sa;
+export default alt.createActions(UserActions);

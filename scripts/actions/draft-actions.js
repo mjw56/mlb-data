@@ -1,31 +1,20 @@
-import Dispatcher from '../utils/dispatcher';
-import Constants from '../constants/constants';
-import Firebase from 'firebase';
+import alt from '../alt';
 import firebaseAPI from '../utils/firebase-mlb-api';
 
 class DraftActions {
-
-  constructor() {}
-
+  
   getDraftStatusForID(id) {
     firebaseAPI.getDraftStatusForID(id).then((result) => {
-      Dispatcher.handleAction({
-        type: Constants.ActionTypes.DRAFT_STATUS,
-        status: result
-      });
+      this.dispatch(result);
     });
   }
 
   updateDraftStatus(update) {
     firebaseAPI.updateDraftStatus(update).then((result) => {
-      Dispatcher.handleAction({
-        type: Constants.ActionTypes.DRAFT_STATUS,
-        status: result
-      });
+      this.dispatch(result);
     });
   }
 
 }
 
-let da = new DraftActions();
-export default da;
+export default alt.createActions(DraftActions);
