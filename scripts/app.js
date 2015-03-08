@@ -5,12 +5,18 @@ import Authentication from './utils/authentication';
 import Login from './components/login/main.react';
 import DraftRoom from './components/draft-room/main.react';
 import LeagueStore from './stores/league-store';
+import UserStore from './stores/user-store';
+import ListenerMixin from 'alt/mixins/ListenerMixin';
 
 let { DefaultRoute, Route, RouteHandler, Link } = Router;
 
 let App = React.createClass({
 
-  mixins: [Router.Navigation],
+  mixins: [Router.Navigation, ListenerMixin],
+
+  statics: {
+    attemptedTransition: null
+  },
 
   /*
   * The main app component can listen for
@@ -20,13 +26,30 @@ let App = React.createClass({
   * TODO: move to a mixin?
   */
   componentDidMount() {
-      LeagueStore.addNewLeagueListener(this._newLeagueAdded);
+      this.listenTo(LeagueStore, this._newLeagueAdded);
+      this.listenTo(UserStore, this._userChange);
+      LeagueStore.getEventEmitter().on('league-store: joinedLeague', this._joinedLeague);
   },
 
+  /* Listen for new league added by user and join draft room */
   _newLeagueAdded() {
     let newLeague = LeagueStore.getNewLeague();
 
     this.transitionTo('draft-room', {name: newLeague.info.name});
+  },
+
+  /* Listen for league that user joined and join draft room */
+  _joinedLeague() {
+    this.transitionTo('draft-room', {name:  LeagueStore.getLeagueJoining() });
+  },
+
+  /* Listen for when user logged in and re-direct to dashboard */
+  _userChange() {
+    let user = UserStore.getUserInfo();
+
+    if((user || {}).loggedIn) {
+      this.replaceWith('/dashboard');
+    }
   },
 
   render() {
