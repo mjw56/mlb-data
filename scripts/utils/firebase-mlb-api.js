@@ -149,6 +149,19 @@ let _joinLeague = (name, userId) => {
   });
 }
 
+let _getDraftDataForID = (id) => {
+  return new Promise((resolve, reject) => {
+    let ref = new Firebase(process.env.FIREBASE_URL);
+
+    ref.child('drafts').once("value", (snapshot) => {
+      resolve({ started: (snapshot.val() || {})[id].started });
+    }, (err) => {
+      console.log('failed to get firebase data ' + err.code);
+      reject(err.code);
+    });
+  });
+}
+
 let _clearData = (user) => {
   let ref = new Firebase(process.env.FIREBASE_URL);
   ref.child('leagues').set({});
