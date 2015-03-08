@@ -11,40 +11,20 @@ export default React.createClass({
   mixins: [PureRenderMixin, Router.Navigation],
 
   getInitialState() {
-    return { showList: false, list: [] };
-  },
-
-  componentDidMount() {
-    LeagueStore.addAllLeaguesChangeListener(this._onChange);
-    LeagueStore.addJoiningLeagueChangeListener(this._joinedLeague);
-
-    LeagueActions.getAllLeagues();
-  },
-
-  componentWillUnmount() {
-    LeagueStore.removeAllLeaguesChangeListener(this._onChange);
-    LeagueStore.removeJoiningLeagueChangeListener(this._joinedLeague);
+    return { showList: false };
   },
 
   _toggleList() {
     this.setState({ showList: !this.state.showList });
   },
 
-  _onChange() {
-    this.setState({ list: LeagueStore.getFullLeaguesList() })
-  },
-
   _joinLeague(event) {
     LeagueActions.joinLeague(event.currentTarget.innerText, UserStore.getUserInfo().user.id);
   },
 
-  _joinedLeague() {
-    this.transitionTo('draft-room', {name: LeagueStore.getLeagueJoining()});
-  },
-
   render() {
 
-    let leagues = Object.keys(this.state.list || {} ).map((league) => {
+    let leagues = Object.keys(this.props.leagues || {} ).map((league) => {
       return <h5 onClick={this._joinLeague} key={league.name}>{league}</h5>;
     });
 
