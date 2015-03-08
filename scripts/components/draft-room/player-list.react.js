@@ -17,9 +17,7 @@ export default React.createClass({
   // TODO: add filtering, search...
 
   render() {
-
-    console.log(this.props.players)
-
+    
     return (
       <Table
         rowHeight={30}

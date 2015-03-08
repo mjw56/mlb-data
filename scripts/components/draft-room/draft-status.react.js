@@ -1,26 +1,12 @@
 import React from 'react/addons';
 import Router from 'react-router';
 import DraftActions from '../../actions/draft-actions';
-import DraftStore from '../../stores/draft-store';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
 
 export default React.createClass({
 
   mixins: [Router.State, PureRenderMixin],
-
-  getInitialState() {
-    return { status: {} };
-  },
-
-  componentDidMount() {
-    DraftStore.addDraftStatusListener(this._updateDraftStatus);
-    DraftActions.getDraftStatusForID(this.props.id);
-  },
-
-  componentWillUnmount() {
-    DraftStore.removeDraftStatusListener(this._updateDraftStatus);
-  },
 
   _startDraft() {
     DraftActions.updateDraftStatus({ id: this.props.id, started: true });
@@ -30,14 +16,10 @@ export default React.createClass({
     DraftActions.updateDraftStatus({ id: this.props.id, started: false });
   },
 
-  _updateDraftStatus() {
-    this.setState({ status: DraftStore.getDraftStatus() });
-  },
-
   render() {
     return (
       <div>
-        { this.state.status.started ?
+        { this.props.status.started ?
 
           <div>
             <h3>The Draft is currently in progress</h3>
