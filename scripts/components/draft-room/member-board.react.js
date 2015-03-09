@@ -3,11 +3,7 @@ import LeagueStore from '../../stores/league-store';
 import DraftClock from './draft-clock.react';
 import UserStore from '../../stores/user-store';
 
-let PureRenderMixin = React.addons.PureRenderMixin;
-
 export default React.createClass({
-
-  mixins: [PureRenderMixin],
 
   getInitialState() {
     return { round: 0, onTheClock: 0 };
@@ -22,11 +18,10 @@ export default React.createClass({
       next = 0;
     } else {
       next = this.state.onTheClock + 1;
+    }
 
-      if(UserStore.getUserInfo().user.id === this.props.members[next]) {
-        console.log('you are on the clock!')
-      }
-
+    if(UserStore.getUserInfo().user.id === this.props.members[next]) {
+      console.log('you are on the clock!')
     }
 
     if(round > 12) {
@@ -38,7 +33,7 @@ export default React.createClass({
 
   render() {
 
-    let members = this.props.members.map((member, i) => {
+    let members = (this.props.members || []).map((member, i) => {
 
       let elem;
 
@@ -53,7 +48,7 @@ export default React.createClass({
 
     return (
       <div>
-        <DraftClock nextPick={this._nextPick} pick={this.state.onTheClock} started={this.props.status} />
+        <DraftClock nextPick={this._nextPick} pick={this.state.onTheClock} {...this.props} />
         <h3>{this.props.id} Member List</h3>
         {members}
       </div>

@@ -5,19 +5,23 @@ class DraftStore {
 
   constructor() {
     this.bindActions(DraftActionCreators);
-    this._draftInfo = { status: {} };
+    this._draftDetails = { };
   }
 
-  onGetDraftStatusForID(status) {
-    this._draftInfo.status = status;
+  onGetDraftDetailsForId(details) {
+    this._draftDetails = details;
   }
 
-  onUpdateDraftStatus(status) {
-    this._draftInfo.status = status;
+  onUpdateDraftStatus(details) {
+    this._draftDetails.status = details.started;
   }
 
   static getDraftStatus() {
-    return this.getState()._draftInfo.status;
+    return this.getState()._draftDetails.status;
+  }
+
+  static getDraftDetails() {
+    return this.getState()._draftDetails;
   }
 
 }

@@ -77,7 +77,11 @@ let _createLeague = (info) => {
   let ref = new Firebase(process.env.FIREBASE_URL);
 
   ref.child('leagues').child(info.name).set(info);
-  ref.child('drafts').child(info.name).set({ started: false });
+  ref.child('drafts').child(info.name).set({
+    started: false,
+    owner: info.ownerId,
+    members: info.members
+  });
   ref.child('users').child(info.ownerId).child('leagues').push({
     'name': info.name
   });
@@ -96,12 +100,12 @@ let _getPlayerStats = () => {
   });
 }
 
-let _getDraftStatusForID = (id) => {
+let _getDraftDetailsForId = (id) => {
   return new Promise((resolve, reject) => {
     let ref = new Firebase(process.env.FIREBASE_URL);
 
     ref.child('drafts').once("value", (snapshot) => {
-      resolve({ started: (snapshot.val() || {})[id].started });
+      resolve(snapshot.val()[id]);
     }, (err) => {
       console.log('failed to get firebase data ' + err.code);
       reject(err.code);
@@ -112,9 +116,15 @@ let _getDraftStatusForID = (id) => {
 let _updateDraftStatus = (update) => {
   return new Promise((resolve, reject) => {
     let ref = new Firebase(process.env.FIREBASE_URL);
-    ref.child('drafts').child(update.id).set({ started: update.started  });
+    ref.child('drafts').child(update.id).child('started').set(update.started);
 
-    resolve(update);
+    ref.child('drafts').once("value", (snapshot) => {
+      resolve(snapshot.val()[update.id]);
+    }, (err) => {
+      console.log('failed to get firebase data ' + err.code);
+      reject(err.code);
+    });
+
   });
 }
 
@@ -175,7 +185,7 @@ export default {
   createLeague: _createLeague,
   getPlayerStats: _getPlayerStats,
   getAllLeagues: _getAllLeagues,
-  getDraftStatusForID: _getDraftStatusForID,
+  getDraftDetailsForId: _getDraftDetailsForId,
   updateDraftStatus: _updateDraftStatus,
   joinLeague: _joinLeague,
   clearData: _clearData

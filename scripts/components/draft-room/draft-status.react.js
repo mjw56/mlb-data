@@ -19,7 +19,7 @@ export default React.createClass({
   render() {
     return (
       <div>
-        { this.props.status.started ?
+        { this.props.started ?
 
           <div>
             <h3>The Draft is currently in progress</h3>

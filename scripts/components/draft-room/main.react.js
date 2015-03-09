@@ -26,19 +26,15 @@ export default React.createClass({
   mixins: [Router.State, PureRenderMixin, ListenerMixin],
 
   getInitialState() {
-    return { stats: [], members: [], league: {}, status: false }
+    return { stats: [], draftDetails: {}, loaded: false }
   },
 
   componentDidMount() {
     this.listenTo(StatsStore, this._updatePlayerStats);
-    this.listenTo(DraftStore, this._updateDraftStatus);
-    DraftActions.getDraftStatusForID(this.props.id);
-    StatsActions.getStats();
+    this.listenTo(DraftStore, this._updateDraftDetails);
 
-    this.setState({
-      league: LeagueStore.getLeagueForID(this.getParams().name),
-      members: Helpers.knuthShuffle(LeagueStore.getLeagueForID(this.getParams().name).members)
-    });
+    DraftActions.getDraftDetailsForId(this.getParams().name);
+    StatsActions.getStats();
   },
 
   _getStatsFromStore() {
@@ -51,8 +47,11 @@ export default React.createClass({
     this._getStatsFromStore();
   },
 
-  _updateDraftStatus() {
-    this.setState({ status: DraftStore.getDraftStatus() });
+  _updateDraftDetails() {
+    this.setState({
+      draftDetails: DraftStore.getDraftDetails(),
+      loaded: true
+    });
   },
 
   render() {
@@ -61,10 +60,11 @@ export default React.createClass({
     return (
       <div>
         <h1>{this.getParams().name} Draft Room</h1>
-        <DraftStatus id={this.getParams().name} status={this.state.status} />
-        <Memberboard id={this.getParams().name} members={this.state.members} status={this.state.status} />
+        <DraftStatus id={this.getParams().name} started={this.state.draftDetails.started} />
+        <Memberboard id={this.getParams().name} members={this.state.draftDetails.members} started={this.state.draftDetails.started} />
         <DraftBoard players={this.state.stats} />
       </div>
+
     );
   }
 

@@ -2,9 +2,9 @@ import alt from '../alt';
 import firebaseAPI from '../utils/firebase-mlb-api';
 
 class DraftActions {
-  
-  getDraftStatusForID(id) {
-    firebaseAPI.getDraftStatusForID(id).then((result) => {
+
+  getDraftDetailsForId(id) {
+    firebaseAPI.getDraftDetailsForId(id).then((result) => {
       this.dispatch(result);
     });
   }
