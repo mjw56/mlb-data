@@ -3,7 +3,11 @@ import LeagueStore from '../../stores/league-store';
 import DraftClock from './draft-clock.react';
 import UserStore from '../../stores/user-store';
 
+let PureRenderMixin = React.addons.PureRenderMixin;
+
 export default React.createClass({
+
+  mixins: [PureRenderMixin],
 
   getInitialState() {
     return { round: 0, onTheClock: 0 };
@@ -29,6 +33,7 @@ export default React.createClass({
     }
 
     this.setState({ onTheClock: next });
+    this.forceUpdate();
   },
 
   render() {
