@@ -15,6 +15,13 @@ class DraftActions {
     });
   }
 
+  addPlayerToRoster(player, user) {
+    firebaseAPI.addPlayerToRoster(player, user).then((result) => {
+      // dispatch the whole updated draft object
+      this.dispatch(result);
+    });
+  }
+
 }
 
 export default alt.createActions(DraftActions);

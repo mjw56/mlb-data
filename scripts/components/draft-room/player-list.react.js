@@ -1,6 +1,7 @@
 import React from 'react/addons';
 import es6shim from 'es6-shim';
 import FixedDataTable from 'fixed-data-table';
+import DraftActions from '../../actions/draft-actions';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
 let Table = FixedDataTable.Table;
@@ -14,15 +15,20 @@ export default React.createClass({
     return this.props.players[rowIndex];
   },
 
+  _rowClick(ev, ind, obj) {
+    DraftActions.addPlayerToRoster(obj, this.props.user);
+  },
+
   // TODO: add filtering, search...
 
   render() {
-    
+
     return (
       <Table
         rowHeight={30}
         rowGetter={this._rowGetter}
         rowsCount={this.props.players.length}
+        onRowClick={this._rowClick}
         width={1000}
         height={10000}
         headerHeight={45}>

@@ -1,7 +1,6 @@
 import React from 'react/addons';
 import LeagueStore from '../../stores/league-store';
 import DraftClock from './draft-clock.react';
-import UserStore from '../../stores/user-store';
 
 let PureRenderMixin = React.addons.PureRenderMixin;
 
@@ -24,7 +23,7 @@ export default React.createClass({
       next = this.state.onTheClock + 1;
     }
 
-    if(UserStore.getUserInfo().user.id === this.props.members[next]) {
+    if(this.props.user.id === this.props.members[next]) {
       console.log('you are on the clock!')
     }
 

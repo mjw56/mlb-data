@@ -5,6 +5,7 @@ import DraftActions from '../../actions/draft-actions';
 import StatsStore from '../../stores/stats-store';
 import LeagueStore from '../../stores/league-store';
 import DraftStore from '../../stores/draft-store';
+import UserStore from '../../stores/user-store';
 import DraftStatus from './draft-status.react';
 import DraftBoard from './draft-board.react';
 import Memberboard from './member-board.react';
@@ -61,8 +62,9 @@ export default React.createClass({
       <div>
         <h1>{this.getParams().name} Draft Room</h1>
         <DraftStatus id={this.getParams().name} started={this.state.draftDetails.started} />
-        <Memberboard id={this.getParams().name} members={this.state.draftDetails.members} started={this.state.draftDetails.started} />
-        <DraftBoard players={this.state.stats} />
+        <Memberboard id={this.getParams().name} members={this.state.draftDetails.members} started={this.state.draftDetails.started}
+         user={UserStore.getUserInfo().user} />
+        <DraftBoard players={this.state.stats} user={UserStore.getUserInfo().user} />
       </div>
 
     );
