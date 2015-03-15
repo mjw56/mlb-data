@@ -13,11 +13,15 @@ class DraftStore {
   }
 
   onUpdateDraftStatus(details) {
-    this._draftDetails.status = details.started;
+    this._draftDetails = details;
+  }
+
+  onAddPlayerToRoster(details) {
+    this._draftDetails = details;
   }
 
   static getDraftStatus() {
-    return this.getState()._draftDetails.status;
+    return this.getState()._draftDetails.started;
   }
 
   static getDraftDetails() {
