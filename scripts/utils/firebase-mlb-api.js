@@ -79,9 +79,11 @@ let _createLeague = (info) => {
   ref.child('leagues').child(info.name).set(info);
   ref.child('drafts').child(info.name).set({
     started: false,
-    owner: info.ownerId,
-    members: info.members
+    owner: info.ownerId
   });
+  ref.child('drafts').child(info.name).child('members').set([{
+    id: info.ownerId
+  }]);
   ref.child('users').child(info.ownerId).child('leagues').push({
     'name': info.name
   });
@@ -172,6 +174,40 @@ let _getDraftDataForID = (id) => {
   });
 }
 
+let _addPlayerToRoster = (leagueId, user, player) => {
+  return new Promise((resolve, reject) => {
+    let ref = new Firebase(process.env.FIREBASE_URL);
+
+    ref.child('drafts').child(leagueId).child('members').once("value", (snapshot) => {
+
+      let updateId = '',
+          members = snapshot.val();
+
+      for(let key in members) {
+
+        if(members[key].id === user.id) {
+          updateId = key;
+          break;
+        }
+      }
+
+      ref.child('drafts').child(leagueId).child('members').child(updateId).child('team')
+      .child(player.PlayerID).set(player);
+
+      ref.child('drafts').once("value", (snapshot) => {
+        resolve((snapshot.val() || {})[leagueId]);
+      }, (err) => {
+        console.log('failed to get firebase data ' + err.code);
+        reject(err.code);
+      });
+
+    }, (err) => {
+      console.log('failed to get firebase data ' + err.code);
+      reject(err.code);
+    });
+  });
+}
+
 let _clearData = (user) => {
   let ref = new Firebase(process.env.FIREBASE_URL);
   ref.child('leagues').set({});
@@ -188,5 +224,6 @@ export default {
   getDraftDetailsForId: _getDraftDetailsForId,
   updateDraftStatus: _updateDraftStatus,
   joinLeague: _joinLeague,
-  clearData: _clearData
+  clearData: _clearData,
+  addPlayerToRoster: _addPlayerToRoster
 }
