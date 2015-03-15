@@ -15,9 +15,8 @@ class DraftActions {
     });
   }
 
-  addPlayerToRoster(player, user) {
-    firebaseAPI.addPlayerToRoster(player, user).then((result) => {
-      // dispatch the whole updated draft object
+  addPlayerToRoster(leagueId, user, player) {
+    firebaseAPI.addPlayerToRoster(leagueId, user, player).then((result) => {
       this.dispatch(result);
     });
   }
