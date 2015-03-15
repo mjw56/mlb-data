@@ -23,7 +23,7 @@ export default React.createClass({
       next = this.state.onTheClock + 1;
     }
 
-    if(this.props.user.id === this.props.members[next]) {
+    if(this.props.user.id === this.props.members[next].id) {
       console.log('you are on the clock!')
     }
 
@@ -31,7 +31,7 @@ export default React.createClass({
       // draft is over
     }
 
-    this.setState({ onTheClock: next });
+    this.setState({ onTheClock: next, round: round });
     this.forceUpdate();
   },
 
@@ -42,9 +42,9 @@ export default React.createClass({
       let elem;
 
       if(i === this.state.onTheClock) {
-        elem = <h4 style={{ border: '1px solid green'}}>{member}</h4>;
+        elem = <h4 style={{ border: '1px solid green'}}>{member.id}</h4>;
       } else {
-        elem = <h4>{member}</h4>;
+        elem = <h4>{member.id}</h4>;
       }
 
       return elem;

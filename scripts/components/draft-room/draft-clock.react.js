@@ -1,14 +1,25 @@
 import React from 'react/addons';
 
+let refreshIntervalId = undefined;
+
 export default React.createClass({
 
   getInitialState() {
-    return { time: '' }
+    return { time: '', running: false }
   },
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.started) {
+    if(nextProps.started && !this.state.running) {
       this._startTimer();
+
+      this.setState({ running: true });
+
+    } else if(this.state.running) {
+      this.props.nextPick();
+
+      clearInterval(refreshIntervalId);
+
+      this.setState({ running: false, time: '' });
     }
   },
 
@@ -16,7 +27,7 @@ export default React.createClass({
       let totalSeconds = 10,
           mins, seconds;
 
-      let refreshIntervalId = setInterval(() => {
+      refreshIntervalId = setInterval(() => {
           mins = parseInt(totalSeconds / 60)
           seconds = parseInt(totalSeconds % 60);
           seconds = seconds < 10 ? "0" + seconds : seconds;

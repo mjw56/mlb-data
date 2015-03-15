@@ -1,12 +1,7 @@
 import React from 'react/addons';
-import Router from 'react-router';
 import DraftActions from '../../actions/draft-actions';
 
-let PureRenderMixin = React.addons.PureRenderMixin;
-
 export default React.createClass({
-
-  mixins: [Router.State, PureRenderMixin],
 
   _startDraft() {
     DraftActions.updateDraftStatus({ id: this.props.id, started: true });

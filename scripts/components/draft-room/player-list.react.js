@@ -16,7 +16,7 @@ export default React.createClass({
   },
 
   _rowClick(ev, ind, obj) {
-    DraftActions.addPlayerToRoster(obj, this.props.user);
+    DraftActions.addPlayerToRoster(this.props.id, this.props.user, obj);
   },
 
   // TODO: add filtering, search...

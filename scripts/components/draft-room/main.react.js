@@ -8,6 +8,7 @@ import DraftStore from '../../stores/draft-store';
 import UserStore from '../../stores/user-store';
 import DraftStatus from './draft-status.react';
 import DraftBoard from './draft-board.react';
+import Rosters from './rosters.react';
 import Memberboard from './member-board.react';
 import Helpers from '../../utils/helpers';
 import ListenerMixin from 'alt/mixins/ListenerMixin';
@@ -53,6 +54,7 @@ export default React.createClass({
       draftDetails: DraftStore.getDraftDetails(),
       loaded: true
     });
+    this.forceUpdate();
   },
 
   render() {
@@ -64,7 +66,8 @@ export default React.createClass({
         <DraftStatus id={this.getParams().name} started={this.state.draftDetails.started} />
         <Memberboard id={this.getParams().name} members={this.state.draftDetails.members} started={this.state.draftDetails.started}
          user={UserStore.getUserInfo().user} />
-        <DraftBoard players={this.state.stats} user={UserStore.getUserInfo().user} />
+         <Rosters members={this.state.draftDetails.members} />
+        <DraftBoard id={this.getParams().name} players={this.state.stats} user={UserStore.getUserInfo().user} />
       </div>
 
     );
