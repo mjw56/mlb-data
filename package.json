@@ -2,7 +2,8 @@
   "name": "mlb-data",
   "version": "0.0.1",
   "scripts": {
-    "start": "make -j"
+    "start": "make -j",
+    "test": "mocha --compilers js:babel/register"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,8 @@
     "babel": "^4.6.1",
     "babel-core": "^4.6.1",
     "babel-loader": "^4.0.0",
+    "chai": "^2.1.1",
+    "chai-as-promised": "^4.3.0",
     "envify": "^1.2.1",
     "envify-loader": "^0.1.0",
     "es6-promise": "^2.0.1",
@@ -26,11 +29,14 @@
     "fs": "0.0.2",
     "immutable": "^3.6.4",
     "lodash.sortbyall": "^3.0.1",
+    "mocha": "^2.2.1",
     "mongoose": "^3.8.23",
     "object-assign": "^2.0.0",
     "react-hot-loader": "^1.1.5",
     "react-router": "^0.12.4",
     "request": "^2.53.0",
+    "sinon": "^1.14.0",
+    "sinon-chai": "^2.7.0",
     "webpack": "^1.7.1",
     "webpack-dev-server": "^1.7.0"
   },
