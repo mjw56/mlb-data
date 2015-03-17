@@ -4,17 +4,18 @@ import DraftActions from '../../actions/draft-actions';
 export default React.createClass({
 
   _startDraft() {
-    DraftActions.updateDraftStatus({ id: this.props.id, started: true });
+    if(this.props.details.completed) return;
+    DraftActions.updateDraftDetails({ id: this.props.id, details: { started: true } });
   },
 
   _pauseDraft() {
-    DraftActions.updateDraftStatus({ id: this.props.id, started: false });
+    DraftActions.updateDraftDetails({ id: this.props.id, details: { started: false } });
   },
 
   render() {
     return (
       <div>
-        { this.props.started ?
+        { this.props.details.started ?
 
           <div>
             <h3>The Draft is currently in progress</h3>

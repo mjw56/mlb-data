@@ -9,14 +9,15 @@ class DraftActions {
     });
   }
 
-  updateDraftStatus(update) {
-    firebaseAPI.updateDraftStatus(update).then((result) => {
+  updateDraftDetails(update) {
+    firebaseAPI.updateDraftDetails(update).then((result) => {
       this.dispatch(result);
     });
   }
 
   addPlayerToRoster(leagueId, user, player) {
     firebaseAPI.addPlayerToRoster(leagueId, user, player).then((result) => {
+      // dispatch the whole updated draft object
       this.dispatch(result);
     });
   }

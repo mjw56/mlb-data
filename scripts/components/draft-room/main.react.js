@@ -63,9 +63,8 @@ export default React.createClass({
     return (
       <div>
         <h1>{this.getParams().name} Draft Room</h1>
-        <DraftStatus id={this.getParams().name} started={this.state.draftDetails.started} />
-        <Memberboard id={this.getParams().name} members={this.state.draftDetails.members} started={this.state.draftDetails.started}
-         user={UserStore.getUserInfo().user} />
+        <DraftStatus id={this.getParams().name} details={this.state.draftDetails} />
+        <Memberboard id={this.getParams().name} details={this.state.draftDetails} user={UserStore.getUserInfo().user} />
          <Rosters members={this.state.draftDetails.members} />
         <DraftBoard id={this.getParams().name} players={this.state.stats} user={UserStore.getUserInfo().user} />
       </div>

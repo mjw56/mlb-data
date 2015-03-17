@@ -79,6 +79,9 @@ let _createLeague = (info) => {
   ref.child('leagues').child(info.name).set(info);
   ref.child('drafts').child(info.name).set({
     started: false,
+    completed: false,
+    onTheClock: 0,
+    round: 0,
     owner: info.ownerId
   });
   ref.child('drafts').child(info.name).child('members').set([{
@@ -115,10 +118,10 @@ let _getDraftDetailsForId = (id) => {
   });
 }
 
-let _updateDraftStatus = (update) => {
+let _updateDraftDetails = (update) => {
   return new Promise((resolve, reject) => {
     let ref = new Firebase(process.env.FIREBASE_URL);
-    ref.child('drafts').child(update.id).child('started').set(update.started);
+    ref.child('drafts').child(update.id).update(update.details);
 
     ref.child('drafts').once("value", (snapshot) => {
       resolve(snapshot.val()[update.id]);
@@ -222,7 +225,7 @@ export default {
   getPlayerStats: _getPlayerStats,
   getAllLeagues: _getAllLeagues,
   getDraftDetailsForId: _getDraftDetailsForId,
-  updateDraftStatus: _updateDraftStatus,
+  updateDraftDetails: _updateDraftDetails,
   joinLeague: _joinLeague,
   clearData: _clearData,
   addPlayerToRoster: _addPlayerToRoster

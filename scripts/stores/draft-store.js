@@ -12,7 +12,7 @@ class DraftStore {
     this._draftDetails = details;
   }
 
-  onUpdateDraftStatus(details) {
+  onUpdateDraftDetails(details) {
     this._draftDetails = details;
   }
 

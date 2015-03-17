@@ -9,17 +9,22 @@ export default React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.started && !this.state.running) {
-      this._startTimer();
+    if(nextProps.details.started && !this.state.running) {
 
+      this._startTimer();
       this.setState({ running: true });
 
-    } else if(this.state.running) {
-      this.props.nextPick();
+    } else if(nextProps.details.started && this.state.running) {
 
       clearInterval(refreshIntervalId);
-
       this.setState({ running: false, time: '' });
+
+    } else if(this.state.running) {
+
+      this.props.nextPick();
+      clearInterval(refreshIntervalId);
+      this.setState({ running: false, time: '' });
+
     }
   },
 
